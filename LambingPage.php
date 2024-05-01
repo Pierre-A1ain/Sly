@@ -1,5 +1,11 @@
 
 <!DOCTYPE html>
+
+<?php
+        include("connexion_mysql.php");
+        include("Header.php");
+        ?>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -16,11 +22,7 @@
         </style>
     </head>
     <body>
-        <?php
-        include("connexion.php");
-        include("Header.php");
-        ?>
-
+        
         <main id="poeme"><br><br>
             <h3>Mouton</h3><br><br>
             <p>Oh, doux mouton, bête de laine,<br>

@@ -16,15 +16,7 @@
     <nav class="navbar">
         <ul>
             <li><a href="LambingPage.php">Accueil</a></li>
-            <li><a href="CreerTicket2.php">Aider un mouton</a></li>
-            <li><a href="VoirTickets.php">Tickets</a></li>
-            <li><a href="VoirMoutons.php">Compter ses moutons</a></li>
-            <li><a href="Entreprise_Modifier.php">Gérer ses cheptels</a></li>
-            <li><a href="AjouterClient3.php">Gérer ses moutons</a></li>
-            <li><a href="AjouterImage3.php">Dessiner un mouton</a></li>
-            <li><a href="Gallery.php">Mes dessins</a></li>
-            <li><a href="Index.php">Se déconnecter</a></li>
-
+            <li><a href="Gestion_Entreprise.php">Gérer ses cheptels</a></li>
         </ul>
     </nav>
 
