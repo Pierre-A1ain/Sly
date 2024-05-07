@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 
 <?php
-        include("connexion_mysql.php");
-        include("Header.php");
+        include("DB_Conn.php");
+        include("header.php");
         ?>
 
 <html lang="en">
