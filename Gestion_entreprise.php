@@ -1,5 +1,5 @@
 <?php
-include("db_conn.php");
+include("db_conn/db_conn.php");
 include("header.php");
 
 // Vérifier si la table existe, sinon la créer
