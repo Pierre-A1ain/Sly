@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 <?php
-        include("DB_Conn.php");
+        include("db_conn.php");
         include("header.php");
         ?>
 

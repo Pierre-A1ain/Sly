@@ -15,8 +15,8 @@
     
     <nav class="navbar">
         <ul>
-            <li><a href="LambingPage.php">Accueil</a></li>
-            <li><a href="Gestion_entreprise.php">Gérer ses cheptels</a></li>
+            <li><a href="lambing_page.php">Accueil</a></li>
+            <li><a href="gestion_entreprise.php">Gérer ses cheptels</a></li>
         </ul>
     </nav>
 
