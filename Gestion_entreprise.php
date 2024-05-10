@@ -40,6 +40,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["Nom_Entreprise"])) {
     }
 }
 
+// Traitement de la modification de nom d'entreprise
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_id"]) && isset($_POST["new_nom"])) {
+    try {
+        // Récupérer l'identifiant de l'entreprise à modifier et le nouveau nom
+        $entreprise_id = $_POST["update_id"];
+        $new_nom = $_POST["new_nom"];
+
+        // Requête de mise à jour dans la base de données
+        $sql = "UPDATE SLY_Entreprises SET Nom_Entreprise = :new_nom WHERE ID_Entreprise = :entreprise_id";
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':entreprise_id', $entreprise_id, PDO::PARAM_INT);
+        $stmt->bindValue(':new_nom', $new_nom, PDO::PARAM_STR);
+        $success = $stmt->execute();
+
+        if ($success) {
+            echo "Nom d'entreprise mis à jour avec succès";
+        } else {
+            echo "Une erreur s'est produite lors de la mise à jour du nom de l'entreprise.";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur lors de la mise à jour du nom de l'entreprise : " . $e->getMessage();
+    }
+}
+
 // Traitement de la suppression d'entreprise
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_id"])) {
     try {
@@ -72,25 +96,39 @@ $entreprises = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter et supprimer des entreprises</title>
+    <title>Ajouter, supprimer et modifier des entreprises</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Ajouter et supprimer des entreprises</h1>
+    <h1>Gérer ses cheptels</h1>
     
     <!-- Formulaire d'ajout d'entreprise -->
-    <h2>Ajouter une nouvelle entreprise</h2>
+    <h2>Ajouter un cheptel</h2>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-        <label for="Nom_Entreprise">Nom de l'entreprise</label>
+        <label for="Nom_Entreprise">Nom du cheptel</label>
         <input type="text" name="Nom_Entreprise" required>
         <input type="submit" value="Ajouter">
     </form>
 
-    <!-- Formulaire de suppression d'entreprise -->
-    <h2>Supprimer une entreprise</h2>
+    <!-- Formulaire de modification de nom d'entreprise -->
+    <h2>Modifier un cheptel</h2>
     <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
-        <label for="entreprise_id">Choisissez une entreprise à supprimer :</label>
-        <select name="delete_id" id="entreprise_id">
+        <label for="update_id">Cheptel à modifier :</label>
+        <select name="update_id" id="update_id">
+            <?php foreach ($entreprises as $entreprise): ?>
+                <option value="<?php echo $entreprise['ID_Entreprise']; ?>"><?php echo $entreprise['Nom_Entreprise']; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <label for="new_nom">Nouveau nom :</label>
+        <input type="text" name="new_nom" required>
+        <input type="submit" value="Modifier">
+    </form>
+
+    <!-- Formulaire de suppression d'entreprise -->
+    <h2>Supprimer un cheptel</h2>
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
+        <label for="delete_id">Cheptel à supprimer :</label>
+        <select name="delete_id" id="delete_id">
             <?php foreach ($entreprises as $entreprise): ?>
                 <option value="<?php echo $entreprise['ID_Entreprise']; ?>"><?php echo $entreprise['Nom_Entreprise']; ?></option>
             <?php endforeach; ?>

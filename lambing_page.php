@@ -27,7 +27,7 @@
             <h3>Mouton</h3><br><br>
             <p>Oh, doux mouton, bête de laine,<br>
                 Comme ta présence nous entraîne,<br>
-                Dans de verts pâturages tu bondis,<br>
+                Dans de verts pâturages je te suis,<br>
                 Et par dessus les barrières au plus profond de la nuit.<br>
                 <br>
                 Insouciant mouton, blanc de pureté,<br>
