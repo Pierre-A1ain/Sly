@@ -10,7 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link href="style.css" rel="stylesheet">
         <title>Lambing Page</title>
         <style>
             #mouton {
@@ -22,13 +22,14 @@
         </style>
     </head>
     <body>
-        
+            <!-- Bouton pour basculer entre les styles -->
+            <button id="toggleButton" onclick="toggleStyles()">CSS classique / Bootstrap</button>
         <main id="poeme"><br><br>
             <h3>Mouton</h3><br><br>
             <p>Oh, doux mouton, bête de laine,<br>
                 Comme ta présence nous entraîne,<br>
                 Dans de verts pâturages je te suis,<br>
-                Et par dessus les barrières au plus profond de la nuit.<br>
+                Et par dessus les barrières, au plus profond de la nuit.<br>
                 <br>
                 Insouciant mouton, blanc de pureté,<br>
                 Dans nos cœurs, tu as su te nicher.<br>

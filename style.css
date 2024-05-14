@@ -26,11 +26,10 @@ h1{
     margin: 15px;
 }
 
-h2{
-    text-align: center;
+.margin15{
     margin: 15px;
 }
-
+/*************************************Header Top**********************************/
 div.header{
     display: flex;
     align-items: center;
@@ -72,7 +71,7 @@ div.header{
 .navbar a:hover{
     background-color: hsl(0, 0%, 10%);
 }
-
+/*************************************Header Bottom**********************************/
 /*Table*/
 
 table{
@@ -130,18 +129,43 @@ table{
     height: auto;
     margin: 5px;
 }
+/*************************************DATA Management Top**********************************/
 
-/*************************************FORMULAIRE**********************************/
+.MainDataManagementWrap{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.EtrWrap {
+    background-color: aliceblue;
+    padding : 15px;
+}
+
+.EmplWrap{
+    background-color:rgba(14, 222, 69, 0.462) ;
+    padding : 15px;
+}
+.corner{
+    padding : 20px;
+    font-weight: bolder;
+}
+
+.degage {
+    margin-bottom: 5px;
+}
+/*************************************DATA Management Bottom**********************************/
+/*************************************FORMULAIRE TOP******************************************/
 
 /*Form*/
 
-label, input { 
+/* label, input { 
     display: block; 
     margin: 5px;
 }
 input { 
     padding: 5px; 
-}
+} */
 
 /*TimeBlock*/
 
@@ -184,3 +208,5 @@ input {
     background-color: #ECF0F1; /* Couleur de fond des options */
     color: #34495E; /* Couleur du texte des options */
 }
+
+/*************************************FORMULAIRE TOP******************************************/
