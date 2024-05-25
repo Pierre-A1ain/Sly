@@ -8,15 +8,21 @@
 </head>
 <body>
     <div class="header">
-    <img src="NightSheep.png" id="sheep" alt="">
-    <h1> &#127925; Is it the real life ? <br> Is just a fantasy ? &#127925; </h1>
-    <img src="SLYLogo1.jpeg" id="ticket" alt="">
+        <img src="NightSheep.png" id="sheep" alt="" href="lambing_page_test.php">
+        <h1> &#127925; Is it the real life ? <br> Is just a fantasy ? &#127925; </h1>
+        <div class="SLYLogo-container">
+            <img src="SLYLogo1.jpeg" id="ticket" alt="" class="SLYLogo">
+        </div>
     </div>
     
     <nav class="navbar">
         <ul>
             <li><a href="lambing_page.php">Accueil</a></li>
-            <li><a href="gestion_entreprise.php">Gérer ses cheptels</a></li>
+            <li><a href="gestion_entreprise.php">Gérer ses enclos</a></li>
+            <li><a href="gestion_entreprise2.php">Gérer ses enclos 2</a></li>
+            <li><a href="tb_fun.php">Tableau test</a></li>
+            <li><a href="Affichetoi2.php">Tableau dire</a></li>
+
         </ul>
     </nav>
 
@@ -24,7 +30,18 @@
         <div id="modal" class="modal" style=display:none>
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>Conception Pierre-Alain Martignoles</p>
+                <h2>Conception</h2><br>
+                <p class="myself">Pierre-Alain Martignoles</p>
+                <div class="modal-btn-line">
+                    <p class="txt-modal-btn-line">Animation ticket</p>
+                    <input type="checkbox" name="toggleBtn" id="toggleBtn" class="toggleBtn" checked>
+                    <label for="toggleBtn" class="labelToggleBtn"></label>
+                </div>
+                <div class="modal-btn-line">
+                    <p class="txt-modal-btn-line">Fond Musical</p>
+                    <input type="checkbox" name="toggleBtn" id="toggleBtn" class="toggleBtn" checked>
+                    <label for="toggleBtn" class="labelToggleBtn"></label>
+                </div>
             </div>
         </div>
 

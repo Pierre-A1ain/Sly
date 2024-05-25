@@ -1,10 +1,9 @@
 
 <!DOCTYPE html>
 
-<?php
-        include("db_conn/db_conn.php");
+    <?php
         include("header.php");
-        ?>
+    ?>
 
 <html lang="en">
     <head>
@@ -22,14 +21,15 @@
         </style>
     </head>
     <body>
+        <main id="poeme"><br>
             <!-- Bouton pour basculer entre les styles -->
-            <button id="toggleButton" onclick="toggleStyles()">CSS classique / Bootstrap</button>
-        <main id="poeme"><br><br>
+            <button id="toggleButton" onclick="toggleStyles()">CSS classique / Bootstrap</button><br><br>
+        
             <h3>Mouton</h3><br><br>
             <p>Oh, doux mouton, bête de laine,<br>
-                Comme ta présence nous entraîne,<br>
-                Dans de verts pâturages je te suis,<br>
-                Et par dessus les barrières, au plus profond de la nuit.<br>
+                Comme ta présence m'entraîne,<br>
+                Dans de verts pâturages tu m'amène,<br>
+                Et par dessus les barrières, a en perdre haleine.<br>
                 <br>
                 Insouciant mouton, blanc de pureté,<br>
                 Dans nos cœurs, tu as su te nicher.<br>

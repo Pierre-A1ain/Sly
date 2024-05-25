@@ -8,6 +8,7 @@
 main{
     margin : 20px;
     text-align: center;
+    padding-top: 110px;
 }
 
 main#poeme{
@@ -29,14 +30,25 @@ h1{
 .margin15{
     margin: 15px;
 }
+
+
+
 /*************************************Header Top**********************************/
 div.header{
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #bbb5ff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90px; 
+    z-index: 1000; /* Assure que le header reste au-dessus du contenu */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
 }
 
+/* Taille des images du header */
 .header img{
     max-width: 100px;
     height: auto;
@@ -44,11 +56,51 @@ div.header{
     margin : 5px;
 }
 
-#ticket:hover {
+.SLYLogo:hover {
     cursor: pointer;
 }
 
+.SLYLogo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 14vh;
+}
+
+.SLYLogo{
+    width: 200px;
+    height: 200px;
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    96% {
+        transform: rotate(0deg);
+    }
+    97% {
+        transform: rotate(20deg);
+    }
+    98% {
+        transform: rotate(0deg);
+    }
+    99% {
+        transform: rotate(20deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
 /* NavBar */
+
+.navbar{
+    position: fixed;
+    top: 90px; /* Ajustez selon la hauteur du header */
+    left: 0;
+    right: 0;
+    z-index: 999; /* Assure que le menu reste au-dessus du contenu */
+    /*box-shadow: 0 2px 5px rgba(0,0,0,0.1);  Optionnel, pour ajouter une ombre */
+}
 
 .navbar ul{
     list-style-type: none;
@@ -58,7 +110,6 @@ div.header{
     margin-bottom: 5px;
     display: flex;
     justify-content: space-around;
-
 }
 
 .navbar a{
@@ -71,65 +122,108 @@ div.header{
 .navbar a:hover{
     background-color: hsl(0, 0%, 10%);
 }
-/*************************************Header Bottom**********************************/
-/*Table*/
 
-table{
-    margin: 15px;
+/* fenêtre modale*/
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
 }
 
-.hero{
-    width: 100%;
-    min-height: 100vh;
-    background: linear-gradient(#e7baff, #c2b6d9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
 }
 
-#drop-area{
-    width: 500px;
-    height: 300px;
-    padding: 30px;
-    background: #fff;
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* fenêtre modale > PAM */
+.myself{
+    margin: 20px;
+    margin-bottom: 80px;
+    padding: 20px;
+    background-color: #3b5e3463;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 5px;
 }
 
-#img-view{
-    width: 100%;
-    height : 100%;
-    border-radius: 20px;
-    border: 2px dashed #bbb5ff;
-    background: #f7f8ff;
-    background-position: center;
-    background-size: cover;
-}
-
-#img-view img{
-    width: 100px;
-    margin-top: 25px ;
-
-}
-
-#img-view span{
-    display: block;
-    font-size: 12px;
-    color: #777;
-    margin-top: 15px;
-}
-
-.gallery {
+.modal-btn-line{
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
 }
 
-.gallery img {
-    width: 200px;
-    height: auto;
-    margin: 5px;
+.txt-modal-btn-line{
+    margin: 10px;
 }
+/* fenêtre modale > Bouton */
+input.toggleBtn{
+    display: none;
+}
+label.labelToggleBtn {
+    display: inline-block;
+    height : 30px;
+    width: 50px;
+    background-color: #3b5e3463;
+    position: relative;
+    transition: all .88s;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+label.labelToggleBtn:after{
+    content : "";
+    height : 20px;
+    width: 20px;
+    background-color: #ffffff;
+    position: absolute;
+    top : 5px;
+    left : 5px;
+    transition: all .88s;
+    border-radius: 50%;
+}
+
+input.toggleBtn:checked + label.labelToggleBtn:after{
+    transform: translateX(20px);
+}
+
+input.toggleBtn:checked + label.labelToggleBtn{
+    background-color: green;
+}
+
+
+
+/*************************************Header Bottom****************************************/
 /*************************************DATA Management Top**********************************/
+.beau_gros_champ{
+    height: 30px;
+    margin : 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
 
 .MainDataManagementWrap{
     display: flex;
@@ -154,6 +248,64 @@ table{
 .degage {
     margin-bottom: 5px;
 }
+
+.degage30 {
+    margin-top: 30px;
+}
+
+.DataCheckingWrap{
+    display: flex;
+    justify-content: space-around;
+}
+
+.EtrTbl{
+    background-color: aliceblue;
+    margin : 15px; 
+}
+
+.EmplTbl{
+    background-color:rgba(14, 222, 69, 0.462) ;
+    margin : 15px;
+    width: 100%;
+    border-style: solid;
+    border: 1px;
+}
+
+.TestTbl{
+    /*width: 100%;*/
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+th.TestTbl, td.TestTbl{
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th.TestTbl{
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+form.formTestTbl {
+    display: inline-block;
+}
+
+form.formTestTbl input[type="submit"] {
+    margin-left: 5px;
+}
+
+
 /*************************************DATA Management Bottom**********************************/
 /*************************************FORMULAIRE TOP******************************************/
 
