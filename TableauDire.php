@@ -35,7 +35,7 @@ include("header.php");
     <title>Tableau Dire</title>
     <script>
         function fetchEmployees(companyId) {
-            fetch('get_employees.php?id=' + companyId)
+            fetch('get_employees.php?id_entreprise=' + companyId)
                 .then(response => response.json())
                 .then(data => {
                     let employeeTable = document.getElementById('employeeTable');
@@ -65,8 +65,8 @@ include("header.php");
     <div>
         <?php
             echo "<table border=1 class='EtrTbl'>";
-            echo "<td>&nbsp;<strong> ID <strong>&nbsp;</td>";
-            echo "<td>&nbsp;<strong> Entreprise </strong></td>";
+            echo "<td>&nbsp;<strong> ID_Entreprise <strong>&nbsp;</td>";
+            echo "<td>&nbsp;<strong> Nom_Entreprise </strong></td>";
             echo "<th>&nbsp;<strong> Nombre d'employés </strong>&nbsp;</th>";
             foreach ($entreprises as $row_etr) {
                 echo "<tr>";

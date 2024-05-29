@@ -23,7 +23,7 @@
     <body>
         <main id="poeme"><br>
             <!-- Bouton pour basculer entre les styles -->
-            <button id="toggleButton" onclick="toggleStyles()">CSS classique / Bootstrap</button><br><br>
+            <button id="toggleButton" onclick="toggleStyles()" class="beau_gros_champ">Ceci n'est pas un Dashboard</button><br><br>
         
             <h3>Mouton</h3><br><br>
             <p>Oh, doux mouton, bête de laine,<br>

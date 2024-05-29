@@ -3,8 +3,8 @@ include("db_conn/db_conn.php");
 
 header('Content-Type: application/json');
 
-if (isset($_GET['id'])) {
-    $id_entreprise = intval($_GET['id']);
+if (isset($_GET['id_entreprise'])) {
+    $id_entreprise = intval($_GET['id_entreprise']);
 
     // Requête SQL pour récupérer les employés de l'entreprise donnée
     $sql = "SELECT SLY_Employes.*, SLY_Entreprises.Nom_Entreprise 

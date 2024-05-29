@@ -18,10 +18,11 @@
     <nav class="navbar">
         <ul>
             <li><a href="lambing_page.php">Accueil</a></li>
+            <li><a href="CreerTicket2.php">Créer un ticket</a></li>
             <li><a href="gestion_entreprise.php">Gérer ses enclos</a></li>
             <li><a href="gestion_entreprise2.php">Gérer ses enclos 2</a></li>
             <li><a href="tb_fun.php">Tableau test</a></li>
-            <li><a href="Affichetoi2.php">Tableau dire</a></li>
+            <li><a href="TableauDire.php">Tableau dire</a></li>
 
         </ul>
     </nav>
