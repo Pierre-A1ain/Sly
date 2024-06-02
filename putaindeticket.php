@@ -18,7 +18,7 @@ include("db_conn/db_conn.php");
         <title>Créer Ticket</title>
     </head>
     <body>
-        <h1>Création de Ticket: ajouter sujet</h1>
+        <h1>Création de Ticket: ajout sujet / id etr / redirection</h1>
 
         <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 
@@ -83,7 +83,16 @@ include("db_conn/db_conn.php");
 
         $success = $stmt->execute();
         if ($success) {
-            echo "Le ticket a bien été créé";
+            echo "<p id='successMessage'>Le ticket a bien été créé.</p>";
+            echo "<script>
+            setTimeout(function() {
+                window.location.href = 'putaindeticket.php';
+            }, 1500);
+        </script>";
+
+             // Redirection après création
+             //header("Location: putaindeticket.php"); 
+             exit();
         } else {
             echo "Une erreur s'est produite lors de la création du ticket.";
         }
