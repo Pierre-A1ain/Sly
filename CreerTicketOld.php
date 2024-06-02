@@ -1,6 +1,23 @@
 <?php
 include("db_conn/db_conn.php");
-include("header.php");
+//include("header.php");
+
+// Vérifier si la table SLY_Images existe, sinon la créer
+$tableExists = $db->query("SHOW TABLES LIKE 'SLY_Images'")->rowCount() > 0;
+if (!$tableExists) {
+    try {
+        $sqlCreateTable = "CREATE TABLE SLY_Images (
+                            ID_Image INT(11) AUTO_INCREMENT PRIMARY KEY,
+                            Nom_Image VARCHAR(255) NOT NULL,
+                            Taille_Image INT,
+                            Bin_Image BLOB
+                          )";
+        $db->exec($sqlCreateTable);
+        echo "Table Images créée avec succès.<br>";
+    } catch (PDOException $e) {
+        echo "Erreur lors de la création de la table Images: " . $e->getMessage() . "<br>";
+    }
+}
 
 // Récupérer les noms des entreprises et leurs identifiants
 $query = "SELECT ID_Entreprise, Nom_Entreprise FROM SLY_Entreprises";
@@ -12,6 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Chemin vers le dossier où les images seront téléchargées
         $target_dir = "images/";
+
+        // Vérifier si le dossier image existe
+        if (!is_dir($target_dir)) {
+            // Créer le dossier s'il n'existe pas
+            if (!mkdir($target_dir, 0777, true)) {
+                throw new Exception("Échec de la création du dossier images.");
+            }
+        }
 
         // Générer un nom de fichier unique basé sur la date et l'heure actuelles
         $image_extension = strtolower(pathinfo($_FILES["Nom_Image"]["name"], PATHINFO_EXTENSION));
@@ -51,48 +76,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (!isset($_POST['submit'])) {
 ?>
 
-<!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
-<!--                                                                Section HTML                                                                -->
-<!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
     <title>Création de Ticket</title>
 </head>
 <body>
-<main>
-    <h1>Créer un ticket &#128526;</h1>
-    <h3 class="margin15"> <a href="CheckJson.php">Générer un json</a> </h3>
+    <h1>Création de Ticket pour de vrai &#128526;</h1>
+    <h3> <a href="CheckJson.php">Générer un json</a> </h3>
     
-    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
-         <!-- Ajout du champ hidden pour envoyer la variable submit --> 
+    <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data" onsubmit="prepareImage(event)">
+        <!-- Ajout du champ hidden pour envoyer la variable submit --> 
             <input type="hidden" name="submit" value="true">
 
          <!-- Ajout d'un champ hidden pour stocker le nom de l'entreprise sélectionnée -->
             <input type="hidden" id="Nom_Entreprise" name="Nom_Entreprise">
 
-         <!-- Date / Heure / Semaine -->
+        <!-- Date / Heure / Semaine -->
             <div class="TimeBlock">
-                <label class="padR7">Semaine</label>
-                <span id="semaine" class="padR20"></span>
+                <label>Semaine</label>
+                <span id="semaine"></span>
 
                 <label></label>
-                <span id="date" class="padR7"></span>
+                <span id="date"></span>
 
                 <label></label>
-                <span id="heure" class="padR7"></span>
+                <span id="heure"></span>
 
             </div>
 
             <div class="wrapper">
                 <div class="wrap-in">
                     <label for="searchInput">Filtre à troupeau</label>
-                    <input type="text" id="searchInput" class="beau_gros_champ"><br>
+                    <input type="text" id="searchInput">
 
-                    <label for="entreprise" class="margin15">Troupeau :</label>
+                    <label for="entreprise">Troupeau :</label>
                     <select class="combo-form" name="entreprise" id="entreprise" required onchange="updateEmployees()">
                         <?php foreach ($entreprises as $entreprise): ?>
                             <option value="<?php echo $entreprise['ID_Entreprise']; ?>"><?php echo $entreprise['Nom_Entreprise']; ?></option>
@@ -104,51 +125,37 @@ if (!isset($_POST['submit'])) {
                     <label for="employe">Mouton :</label>
                     <select name="employe" id="employe" required onchange="updatePhoneNumber(); updateMail();"class="combo-form">
                         <!-- options ajoutées dynamiquement via JavaScript -->
-                    </select><br>
+                    </select>
 
                     <label for="telephone">Numéro de téléphone :</label>
-                    <input type="tel" id="telephone" name="telephone" readonly class="beau_gros_champ"><br>
+                    <input type="tel" id="telephone" name="telephone" readonly>
 
                     <label for="email">Email :</label>
-                    <input type="email" id="email" name="email" readonly class="beau_gros_champ" size="30px">
+                    <input type="email" id="email" name="email" readonly size="30">
                 </div>
-                <div class="wrap-in entravo">
-                    <div>&#x2192; boutons tel/mail</div><br>
-                    <div>&#x2192; choix degré urgence </div><br>
-                    <div>&#x2192; affecter à ... </div>
+                <div class="wrap-in">
+                    <label for="Nom_Image"></label>
+                    <input type="file" id="hiddenImageInput" name="Nom_Image" accept="image/*">
+                    <input type="text" id="imagePasteArea" placeholder="Collez votre image ici" onpaste="handlePaste(event)">
                 </div>
-                <!-- Cadre capture image html -->
-                <div class="wrap-in entravo">
-                    <label for="Nom_Image"></label><br>
-                    <input type="file" id="hiddenImageInput" name="Nom_Image" accept="image/*"><br>
-                    <div class="margin15"></div>
-                    <input type="text" id="imagePasteArea" placeholder="Collez votre image ici" onpaste="handlePaste(event)" size="30px" rows="8">
-                </div>
-                <!-- Fin cadre capture image html -->
             </div>
         <br>
 
             <div class="wrapper">                
                 <div class="wrap-in">
                     <label for="demande">Sujet :</label>
-                    <textarea id="demande" name="demande" rows="8" cols="70" required></textarea>
+                    <textarea id="demande" name="demande" rows="8" cols="100" required></textarea>
                 </div>
                 <div class="wrap-in">
                     <label for="resolution">Résolution :</label>
-                    <textarea id="resolution" name="resolution" rows="8" cols="70"></textarea>
+                    <textarea id="resolution" name="resolution" rows="8" cols="100"></textarea>
                 </div>
             
                 <div class="wrap-in">
-                    <!--<input type="submit" value="Créér et clore" class="beau_gros_champ">-->
-                    <div class="degage30"></div>
-                    <input type="submit" name="submit" value="Créér" class="beau_gros_champ">
+                    <input type="submit" value="Créér">
                 </div>
             </div>
     </form>
-
-<!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
-<!--                                                                SCRIPTS                                                                -->
-<!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
 
     <script>
         // ---------------------------- Obtenir date, heure et numéro de semaine en temps réel ----------------------------
@@ -207,7 +214,7 @@ if (!isset($_POST['submit'])) {
         // Mettre à jour EMPLOYE en fonction ENTREPRISE
         function updateEmployees() {
             var entrepriseSelect = document.getElementById("entreprise");
-            var id_entreprise = entrepriseSelect.value;
+            var entreprise_id = entrepriseSelect.value;
             var employeSelect = document.getElementById("employe");
 
             // Effacer les options précédentes si besoin
@@ -235,7 +242,7 @@ if (!isset($_POST['submit'])) {
                 }
             }
             };
-            xhr.open("GET", "get_employees.php?id_entreprise=" + encodeURIComponent(id_entreprise), true);
+            xhr.open("GET", "get_employees.php?id_entreprise=" + encodeURIComponent(entreprise_id), true);
             xhr.send();
         }
 
@@ -269,22 +276,22 @@ if (!isset($_POST['submit'])) {
             // Mettre à jour le champ e-mail
             eMailInput.value = eMail;
         }
-            // Script gestion image
+            //Script gestion image
         function handlePaste(event) {
         var items = (event.clipboardData || event.originalEvent.clipboardData).items;
         for (index in items) {
-                var item = items[index];
-                if (item.kind === 'file') {
-                    var blob = item.getAsFile();
-                    var reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById('imagePasteArea').style.backgroundImage = 'url(' + event.target.result + ')';
-                        document.getElementById('hiddenImageInput').files = [blob];
-                    };
-                    reader.readAsDataURL(blob);
-                }
+            var item = items[index];
+            if (item.kind === 'file') {
+                var blob = item.getAsFile();
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('imagePasteArea').style.backgroundImage = 'url(' + event.target.result + ')';
+                    document.getElementById('hiddenImageInput').files = [blob];
+                };
+                reader.readAsDataURL(blob);
             }
         }
+    }
 
     function prepareImage(event) {
         // If an image was pasted, prevent the default form submission
@@ -295,7 +302,6 @@ if (!isset($_POST['submit'])) {
     }
 
     </script>
-</main>
 </body>
 </html>
 
@@ -321,29 +327,29 @@ if (!isset($_POST['submit'])) {
         $stmt = $db->prepare($sql); 
 
         // Liaison des paramètres
-            // $Prenom_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            // $stmt->bindValue(':Prenom_Employe', $Prenom_Employe, PDO::PARAM_STR);
+            $Prenom_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $stmt->bindValue(':Prenom_Employe', $Prenom_Employe, PDO::PARAM_STR);
 
-            // $Nom_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            // $stmt->bindValue(':Nom_Employe', $Nom_Employe, PDO::PARAM_STR);
+            $Nom_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $stmt->bindValue(':Nom_Employe', $Nom_Employe, PDO::PARAM_STR);
 
-            // $Num_Employe = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_NUMBER_INT);
-            // $stmt->bindValue(':Num_Employe', $Num_Employe, PDO::PARAM_INT);
+            $Num_Employe = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_NUMBER_INT);
+            $stmt->bindValue(':Num_Employe', $Num_Employe, PDO::PARAM_INT);
 
-            // $Mail_Employe = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            // $stmt->bindValue(':Mail_Employe', $Mail_Employe, PDO::PARAM_STR);
+            $Mail_Employe = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $stmt->bindValue(':Mail_Employe', $Mail_Employe, PDO::PARAM_STR);
 
-            // $ID_Entreprise = filter_input(INPUT_POST, 'entreprise', FILTER_SANITIZE_NUMBER_INT);
-            // $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
+            $ID_Entreprise = filter_input(INPUT_POST, 'entreprise', FILTER_SANITIZE_NUMBER_INT);
+            $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
 
-            // $Nom_Entreprise = filter_input(INPUT_POST, 'Nom_Entreprise', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            // $stmt->bindValue(':Nom_Entreprise', $Nom_Entreprise, PDO::PARAM_STR);
+            $Nom_Entreprise = filter_input(INPUT_POST, 'Nom_Entreprise', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $stmt->bindValue(':Nom_Entreprise', $Nom_Entreprise, PDO::PARAM_STR);
 
             $Sujet_Ticket = filter_input(INPUT_POST, 'demande', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $stmt->bindValue(':demande', $Sujet_Ticket, PDO::PARAM_STR);
 
-            // $Resolution_Ticket = filter_input(INPUT_POST, 'resolution', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            // $stmt->bindValue(':resolution', $Resolution_Ticket, PDO::PARAM_STR);
+            $Resolution_Ticket = filter_input(INPUT_POST, 'resolution', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $stmt->bindValue(':resolution', $Resolution_Ticket, PDO::PARAM_STR);
 
             $stmt->bindValue(':SemaineCreationTicket', $SemaineCreationTicket, PDO::PARAM_INT);
 
@@ -357,7 +363,7 @@ if (!isset($_POST['submit'])) {
 
     } catch (PDOException $e) {
         // En cas d'erreur, affichez un message d'erreur.
-        echo "Erreur lors de la création du ticket : " . $e->getMessage();
+        echo "&nbsp;&nbsp;" . "Erreur lors de la création du ticket : " . $e->getMessage();
     }
 }
 // Fermer la connexion à la base de données
