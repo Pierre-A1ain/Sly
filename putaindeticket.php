@@ -18,7 +18,8 @@ include("db_conn/db_conn.php");
         <title>Créer Ticket</title>
     </head>
     <body>
-        <h1>Création de Ticket: ajout sujet / id etr / redirection</h1>
+        <h1>Création de Ticket: ajout sujet / id etr / redirection </h1>
+        <h3> <a href="json.php">Générer un json</a> </h3>
 
         <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" method="post">
 
@@ -36,9 +37,12 @@ include("db_conn/db_conn.php");
 
             <div class="wrap-in">
                     <label for="employe">Mouton :</label>
-                    <select name="employe" id="employe" required onchange="updatePhoneNumber(); updateMail();"class="combo-form">
+                    <select name="employe" id="employe" required class="combo-form">
                         <!-- options ajoutées dynamiquement via JavaScript -->
-                    </select><br><br>
+                    </select>
+                    
+                    <label for="ID_Employe">ID :</label>
+                    <input type="ID" id="ID_Employe" name="ID_Employe" readonly class="beau_gros_champ"><br><br>
 
                     <label for="telephone">Numéro de téléphone :</label>
                     <input type="tel" id="telephone" name="telephone" readonly class="beau_gros_champ"><br><br>
@@ -54,6 +58,14 @@ include("db_conn/db_conn.php");
             <input type="submit" name="submit" value="Créér">
         </form>
         <script src="scripts/FORM_MAJ_Employe.js"></script>
+        <script>
+            document.getElementById("employe").addEventListener("change", function() {
+            var selectedOption = this.options[this.selectedIndex];
+            document.getElementById("ID_Employe").value = selectedOption.dataset.ID;
+            document.getElementById("telephone").value = selectedOption.dataset.telephone;
+            document.getElementById("email").value = selectedOption.dataset.email;
+            });
+        </script>
     </body>
 </html>
 
@@ -64,10 +76,12 @@ include("db_conn/db_conn.php");
 
             // Requête d'insertion dans la base de données
             $sql = "INSERT INTO SLY_Ticket ( Sujet_Ticket,
-                                             ID_Entreprise
+                                             ID_Entreprise,
+                                             ID_employe
                                             ) 
                                     VALUES ( :demande, 
-                                            :ID_Entreprise
+                                            :ID_Entreprise,
+                                            :ID_Employe
                                             )
                     ";
             $stmt = $db->prepare($sql); 
@@ -78,6 +92,9 @@ include("db_conn/db_conn.php");
 
         $ID_Entreprise = filter_input(INPUT_POST, 'entreprise', FILTER_SANITIZE_NUMBER_INT);
             $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
+
+        $ID_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_NUMBER_INT);
+            $stmt->bindValue(':ID_Employe', $ID_Employe, PDO::PARAM_INT);
 
         $db = null;
 
