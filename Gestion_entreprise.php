@@ -201,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["Prenom_Employe"])) {
                     </select>
                     <!--<label for="new_nom">Nouveau nom :</label>-->
                     <br class="degage">
-                    <input type="text" name="new_nom" id="new_nom" placeholder="Nouveau nom" size="45" required>
+                    <input type="text" name="new_nom" id="new_nom" placeholder=" Nouveau nom" size="45" required>
                     <input type="submit" value="Modifier">
                 </form>
             </div>

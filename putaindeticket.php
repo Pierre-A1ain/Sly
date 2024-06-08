@@ -37,12 +37,12 @@ include("db_conn/db_conn.php");
 
             <div class="wrap-in">
                     <label for="employe">Mouton :</label>
-                    <select name="employe" id="employe" required class="combo-form">
+                    <select name="employe" id="employe" onchange="DataEmploye();" class="combo-form">
                         <!-- options ajoutées dynamiquement via JavaScript -->
-                    </select>
+                    </select><br><br>
                     
-                    <label for="ID_Employe">ID :</label>
-                    <input type="ID" id="ID_Employe" name="ID_Employe" readonly class="beau_gros_champ"><br><br>
+                    <!--<label for="ID_Employe">ID :</label>
+                    <input type="ID" id="ID_Employe" name="ID_Employe" readonly class="beau_gros_champ">-->
 
                     <label for="telephone">Numéro de téléphone :</label>
                     <input type="tel" id="telephone" name="telephone" readonly class="beau_gros_champ"><br><br>
@@ -59,12 +59,13 @@ include("db_conn/db_conn.php");
         </form>
         <script src="scripts/FORM_MAJ_Employe.js"></script>
         <script>
-            document.getElementById("employe").addEventListener("change", function() {
-            var selectedOption = this.options[this.selectedIndex];
-            document.getElementById("ID_Employe").value = selectedOption.dataset.ID;
-            document.getElementById("telephone").value = selectedOption.dataset.telephone;
-            document.getElementById("email").value = selectedOption.dataset.email;
-            });
+            function DataEmploye() {
+                        var select = document.getElementById("employe");
+                        var input_telephone = document.getElementById("telephone");
+                            input_telephone.value = select.options[select.selectedIndex].dataset.telephone;
+                        var input_email = document.getElementById("email");
+                            input_email.value = select.options[select.selectedIndex].dataset.email;
+                    }
         </script>
     </body>
 </html>
