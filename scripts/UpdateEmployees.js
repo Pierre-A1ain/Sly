@@ -1,5 +1,5 @@
            
-           //FORM_MAJ_Employe.js : Mettre à jour EMPLOYE en fonction ENTREPRISE dans créer ticket
+           //UpdateEmployees.js : Mettre à jour EMPLOYE en fonction ENTREPRISE dans créer ticket
 
             // Mettre à jour EMPLOYE en fonction ENTREPRISE
             function updateEmployees() {
