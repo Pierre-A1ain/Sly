@@ -37,7 +37,7 @@ include("db_conn/db_conn.php");
 
             <div class="wrap-in">
                     <label for="employe">Mouton :</label>
-                    <select name="employe" id="employe" onchange="DataEmploye();" class="combo-form">
+                    <select name="employe" id="employe" onchange="MajDataEmploye();" class="combo-form">
                         <!-- options ajoutées dynamiquement via JavaScript -->
                     </select><br><br>
                     
@@ -57,15 +57,11 @@ include("db_conn/db_conn.php");
 
             <input type="submit" name="submit" value="Créér">
         </form>
+        <script src="scripts/Filtre_Entreprise.js"></script>
         <script src="scripts/FORM_MAJ_Employe.js"></script>
+        <script src="scripts/MajDataEmploye.js"></script>
         <script>
-            function DataEmploye() {
-                        var select = document.getElementById("employe");
-                        var input_telephone = document.getElementById("telephone");
-                            input_telephone.value = select.options[select.selectedIndex].dataset.telephone;
-                        var input_email = document.getElementById("email");
-                            input_email.value = select.options[select.selectedIndex].dataset.email;
-                    }
+
         </script>
     </body>
 </html>
