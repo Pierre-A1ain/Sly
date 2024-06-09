@@ -20,9 +20,8 @@
             <li><a href="CreerTicket2.php">Créer un ticket</a></li>
             <li><a href="SaisirTicket.php">P2T</a></li>
             <li><a href="VoirTickets.php">Voir les tickets</a></li>
+            <li><a href="Coller_Image.php">Capture moi un mouton</a></li>
             <li><a href="gestion_entreprise.php">Gérer ses enclos</a></li>
-            <li><a href="gestion_entreprise2.php">Gérer ses enclos 2</a></li>
-            <li><a href="tb_fun.php">Tableau test</a></li>
             <li><a href="TableauDire.php">Tableau dire</a></li>
 
         </ul>

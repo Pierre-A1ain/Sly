@@ -16,9 +16,13 @@ include("db_conn/db_conn.php");
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Créer Ticket</title>
+        <script src="scripts/DateTime.js"></script>
+        <script src="scripts/Filtre_Entreprise.js"></script>
+        <script src="scripts/UpdateEmployees.js"></script>
+        <script src="scripts/UpdateEmployeData.js"></script>
     </head>
     <body>
-        <h1>Création de Ticket sans chichi </h1>
+        <h1>Création de Ticket</h1>
          <!-- Date / Heure / Semaine -->
          <div class="TimeBlock">
                 <label>Semaine</label>
@@ -37,7 +41,7 @@ include("db_conn/db_conn.php");
                     <input type="text" id="searchInput" class="beau_gros_champ">
 
                     <label for="entreprise" class="margin15">Troupeau :</label>
-                    <select class="combo-form" name="entreprise" id="entreprise" required onchange="updateEmployees()">
+                    <select class="combo-form" name="entreprise" id="entreprise" required onchange="updateEmploye();">
                         <?php foreach ($entreprises as $entreprise): ?>
                             <option value="<?php echo $entreprise['ID_Entreprise']; ?>"><?php echo $entreprise['Nom_Entreprise']; ?></option>
                         <?php endforeach; ?>
@@ -46,7 +50,7 @@ include("db_conn/db_conn.php");
 
             <div class="wrap-in">
                     <label for="employe">Mouton :</label>
-                    <select name="employe" id="employe" onchange="MajDataEmploye();" class="combo-form">
+                    <select name="employe" id="employe" onchange="updateEmploye_Data();" class="combo-form">
                         <!-- options ajoutées dynamiquement via JavaScript -->
                     </select><br><br>
                     
@@ -66,32 +70,9 @@ include("db_conn/db_conn.php");
 
             <input type="submit" name="submit" value="Créér">
         </form>
-        <script src="scripts/Filtre_Entreprise.js"></script>
-        <script src="scripts/UpdateEmployees.js"></script>
-        <script src="scripts/MajDataEmploye.js"></script>
+
         <script>
-                // ---------------------------- Obtenir date, heure et numéro de semaine en temps réel ----------------------------
-            function updateDateTime() {
-                var now = new Date();
-                var dateElement = document.getElementById('date');
-                var heureElement = document.getElementById('heure');
-                var semaineElement = document.getElementById('semaine');
-
-                // Affichage de la date
-                dateElement.textContent = now.toLocaleDateString('fr-FR');
-
-                // Affichage de l'heure
-                heureElement.textContent = now.toLocaleTimeString('fr-FR');
-
-                // Calcul du numéro de semaine
-                var firstDayOfYear = new Date(now.getFullYear(), 0, 1);
-                var pastDaysOfYear = (now - firstDayOfYear) / 86400000;
-                semaineElement.textContent = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-            }
-
-            // Appel initial et mise à jour périodique de la fonction pour obtenir la date, l'heure et le numéro de semaine
-            updateDateTime();
-            setInterval(updateDateTime, 1000); // Mise à jour chaque seconde
+            
         </script>
     </body>
 </html>

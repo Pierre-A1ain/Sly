@@ -1,8 +1,10 @@
            
-           //UpdateEmployees.js : Mettre à jour EMPLOYE en fonction ENTREPRISE dans créer ticket
+           //UpdateEmployees.js : 
+                // 1. Mettre à jour EMPLOYE en fonction ENTREPRISE dans SaisirTicket.php
+                // 2. Utiliser get_employees.php pr récupérer data en AJAX
 
             // Mettre à jour EMPLOYE en fonction ENTREPRISE
-            function updateEmployees() {
+            function updateEmploye() {
                 var entrepriseSelect = document.getElementById("entreprise");
                 var id_entreprise = entrepriseSelect.value;
                 var employeSelect = document.getElementById("employe");
@@ -11,6 +13,10 @@
             if (employeSelect.options.length > 0) {
                     employeSelect.innerHTML = "";
             }
+
+            // Effacer les champs téléphone et email
+            //telephoneInput.value = "";
+            //emailInput.value = "";
 
             // Requête AJAX pour récupérer les employés de l'entreprise sélectionnée
             var xhr = new XMLHttpRequest();
@@ -37,4 +43,4 @@
         }
 
         // Appel initial de la fonction updateEmployees() au chargement de la page
-        //updateEmployees();
+        updateEmploye();
