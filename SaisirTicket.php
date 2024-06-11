@@ -168,8 +168,8 @@ include("db_conn/db_conn.php");
         $ID_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_NUMBER_INT);
 
         // Insérer les données du ticket dans la base de données
-        $sql = "INSERT INTO SLY_Ticket ( Sujet_Ticket, ID_Entreprise, ID_employe ) 
-                VALUES ( :demande, :ID_Entreprise, :ID_Employe )";
+        $sql = "INSERT INTO SLY_Ticket ( Sujet_Ticket, ID_Entreprise, ID_employe, DateCreationTicket, Statut_Ticket ) 
+                VALUES ( :demande, :ID_Entreprise, :ID_Employe, NOW(), 1 )";
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':demande', $Sujet_Ticket, PDO::PARAM_STR);
         $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
