@@ -1,6 +1,7 @@
                 // Mettre à jour Tems heure dans SaisirTicket.php
                 // ---------------------------- Obtenir date, heure et numéro de semaine en temps réel ----------------------------
-            function updateDateTime() {
+
+                function updateDateTime() {
                 var now = new Date();
                 var dateElement = document.getElementById('date');
                 var heureElement = document.getElementById('heure');

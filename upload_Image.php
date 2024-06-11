@@ -3,7 +3,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageData = $_POST['imageData'];
-    $companyName = trim($_POST['companyName']);
+    $companyName = $_POST['ID_Entreprise'];
 
     // Vérifier si les données de l'image sont présentes
     if (!empty($imageData) && !empty($companyName)) {
