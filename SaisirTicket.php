@@ -125,10 +125,33 @@ include("db_conn/db_conn.php");
             }
         });
         </script>
+        <script>
+            function copyTableContents() 
+            {
+                var table = document.querySelector('table');
+                var range = document.createRange();
+                range.selectNode(table);
+                window.getSelection().removeAllRanges(); // Clear any previous selections
+                window.getSelection().addRange(range);
+
+                try {
+                    var successful = document.execCommand('copy');
+                    if (successful) {
+                        alert('Le contenu du tableau a été copié.');
+                    } else {
+                        alert('La copie du contenu a échoué.');
+                    }
+                } catch (err) {
+                    alert('La commande de copie a échoué.');
+                }
+
+                window.getSelection().removeAllRanges(); // Clear the selection
+            }
+        </script>
     </body>
     <script>
         
-                        // Mettre à jour Tems heure dans SaisirTicket.php
+                        // Mettre à jour Temps heure dans SaisirTicket.php
                 // ---------------------------- Obtenir date, heure et numéro de semaine en temps réel ----------------------------
 
                 function updateDateTime() {
@@ -167,55 +190,101 @@ include("db_conn/db_conn.php");
         $ID_Entreprise = filter_input(INPUT_POST, 'entreprise', FILTER_SANITIZE_NUMBER_INT);
         $ID_Employe = filter_input(INPUT_POST, 'employe', FILTER_SANITIZE_NUMBER_INT);
 
+        // Traiter les données de l'image
+        $imageData = $_POST['imageData'];
+        $fileName = null;
+
+        if (!empty($imageData)) 
+        {
+            // Récupérer le nom de l'entreprise
+            $query = "SELECT Nom_Entreprise FROM SLY_Entreprises WHERE ID_Entreprise = :ID_Entreprise";
+            $stmt = $db->prepare($query);
+            $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
+            $stmt->execute();
+            $entreprise = $stmt->fetch(PDO::FETCH_ASSOC);
+            $Nom_Entreprise = $entreprise['Nom_Entreprise'];
+
+            // Extraire le type de l'image (par exemple "image/png")
+            $imageParts = explode(";base64,", $imageData);
+            $imageTypeAux = explode("image/", $imageParts[0]);
+            $imageType = $imageTypeAux[1];
+
+            // Décoder les données base64
+            $imageBase64 = base64_decode($imageParts[1]);
+
+            // Créer un nom de fichier valide
+            $fileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $Nom_Entreprise) . '-' . date("YmdHis") . '.' . $imageType;
+
+            // Définir le chemin de sauvegarde
+            $filePath = 'images/' . $fileName;
+
+            // Sauvegarder le fichier sur le serveur
+            file_put_contents($filePath, $imageBase64);
+        }
+
         // Insérer les données du ticket dans la base de données
-        $sql = "INSERT INTO SLY_Ticket ( Sujet_Ticket, ID_Entreprise, ID_employe, DateCreationTicket, Statut_Ticket ) 
-                VALUES ( :demande, :ID_Entreprise, :ID_Employe, NOW(), 1 )";
+        $sql = "INSERT INTO SLY_Ticket ( Sujet_Ticket, ID_Entreprise, ID_employe, DateCreationTicket, Statut_Ticket, Nom_Image ) 
+                VALUES ( :demande, :ID_Entreprise, :ID_Employe, DATE_ADD(NOW(), INTERVAL 2 HOUR), 1, :Nom_Image )";
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':demande', $Sujet_Ticket, PDO::PARAM_STR);
         $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
         $stmt->bindValue(':ID_Employe', $ID_Employe, PDO::PARAM_INT);
+        $stmt->bindValue(':Nom_Image', $fileName, PDO::PARAM_STR);
+
         $success = $stmt->execute();
 
-        if ($success) {
-            // Traiter les données de l'image
-            $imageData = $_POST['imageData'];
-            if (!empty($imageData)) {
+        if ($success) 
+        {
+            // Récupérer les informations du ticket créé
+            $ticketID = $db->lastInsertId();
+            $query = "SELECT * FROM SLY_Ticket WHERE ID_Ticket = :ID_Ticket";
+            $stmt = $db->prepare($query);
+            $stmt->bindValue(':ID_Ticket', $ticketID, PDO::PARAM_INT);
+            $stmt->execute();
+            $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // Récupérer le nom de l'entreprise
-                $query = "SELECT Nom_Entreprise FROM SLY_Entreprises WHERE ID_Entreprise = :ID_Entreprise";
-                $stmt = $db->prepare($query);
-                $stmt->bindValue(':ID_Entreprise', $ID_Entreprise, PDO::PARAM_INT);
-                $stmt->execute();
-                $entreprise = $stmt->fetch(PDO::FETCH_ASSOC);
-                $Nom_Entreprise = $entreprise['Nom_Entreprise'];
-
-                // Extraire le type de l'image (par exemple "image/png")
-                $imageParts = explode(";base64,", $imageData);
-                $imageTypeAux = explode("image/", $imageParts[0]);
-                $imageType = $imageTypeAux[1];
-
-                // Décoder les données base64
-                $imageBase64 = base64_decode($imageParts[1]);
-
-                 // Créer un nom de fichier valide
-                 $fileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $Nom_Entreprise) . '-' . date("YmdHis") . '.' . $imageType;
-
-                // Définir le chemin de sauvegarde
-                $filePath = 'images/' . $fileName;
-
-                // Sauvegarder le fichier sur le serveur
-                file_put_contents($filePath, $imageBase64);
-                echo "Image sauvegardée avec succès : <a href='$filePath'>$fileName</a>";
+            // Afficher les informations du ticket dans un tableau HTML
+            echo "<table border='1'>";
+            echo "<tr>";
+            echo "<th>ID Ticket</th>";
+            echo "<th>Sujet</th>";
+            echo "<th>ID Entreprise</th>";
+            echo "<th>ID Employé</th>";
+            echo "<th>Date de Création</th>";
+            echo "<th>Statut</th>";
+            if ($fileName) 
+            {
+                echo "<th>Nom de l'image</th>";
             }
+            echo "</tr>";
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($ticket['ID_Ticket']) . "</td>";
+            echo "<td>" . htmlspecialchars($ticket['Sujet_Ticket']) . "</td>";
+            echo "<td>" . htmlspecialchars($ticket['ID_Entreprise']) . "</td>";
+            echo "<td>" . htmlspecialchars($ticket['ID_Employe']) . "</td>";
+            echo "<td>" . htmlspecialchars($ticket['DateCreationTicket']) . "</td>";
+            echo "<td>" . htmlspecialchars($ticket['Statut_Ticket']) . "</td>";
+            if ($fileName) 
+            {
+                echo "<td><a href='$filePath'>" . htmlspecialchars($ticket['Nom_Image']) . "</a></td>";
+            }
+            echo "</tr>";
+            echo "</table>";
+
+            // Boutons
+            echo "<button onclick=\"copyTableContents();\">Copier le contenu</button>";
+            echo "<button onclick=\"window.location.href='SaisirTicket.php';\">Nouveau ticket</button>";
 
             echo "<p id='successMessage'>Le ticket a bien été créé.</p>";
-            echo "<script>
-                setTimeout(function() {
-                    window.location.href = 'SaisirTicket.php';
-                }, 1500);
-            </script>";
             exit();
-        } else {
+            // echo "<script>
+            //     setTimeout(function() {
+            //         window.location.href = 'SaisirTicket.php';
+            //     }, 1500);
+            // </script>";
+        } 
+        else 
+        {
             echo "Une erreur s'est produite lors de la création du ticket.";
         }
     } catch (PDOException $e) {
